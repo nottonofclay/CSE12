@@ -7,8 +7,12 @@ income_from_record:
 #function RETURNS income numerical value of the asci income in a0 (34 in our example)
 	
 # Start your coding from here!
-
-	li a0, 0
+	lwu a0, 0(a0)
+	li a3, 0
+	
+	character_loop:
+		lb a3,0(a0)
+		beq 
 	#if no student code entered, a0 just returns 0 always :(
 	
 # End your  coding  here!
