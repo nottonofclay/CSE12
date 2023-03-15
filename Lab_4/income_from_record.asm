@@ -12,7 +12,6 @@ income_from_record:
 	
 	character_loop:
 		lb a3,0(a0)
-		beq 
 	#if no student code entered, a0 just returns 0 always :(
 	
 # End your  coding  here!
