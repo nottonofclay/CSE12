@@ -1,18 +1,24 @@
-# Copy-paste this into the very top of your income_from_record.asm.
-.data
-incomeStr: .asciz "1\r"
+#.data
+# incomeStr: .asciz "1\r"
 
-.text
-li a0 0x10040004
-la t1 incomeStr
-sw t1 (a0)
-
-# Also comment out the return instruction at the end of the file!
+# .text
+# li a0 0x10040004
+# la t1 incomeStr
+# sw t1 (a0)
 
 
 income_from_record:
 
-
+addi sp,sp,-72
+sd a3, 0(sp)
+sd s1, 8(sp)
+sd s2, 16(sp)
+sd s3, 24(sp)
+sd s4, 32(sp)
+sd s5, 40(sp)
+sd s6, 48(sp)
+sd s7, 56(sp)
+sd ra, 64(sp)
 #function to return numerical income from a specific record
 #e.g. for record "Microsoft,34\r\n", income to return is 34(for which name is Microsoft)
 
@@ -25,12 +31,14 @@ income_from_record:
 	#if no student code entered, a0 just returns 0 always :(
 	# s2 is the thingy
 
-li s0, 0x0d										# initialize with \r 
+li a3, 0x0d										# initialize with \r 
 lw a0, (a0)
+li s2, 0
+li s3, 0
 	
 	char_start:
 		lb s1, (a0)
-		beq, s1, s0, char_end					# if byte is = \r
+		beq, s1, a3, char_end					# if byte is = \r
 	char_body:
 		addi a0,a0,1							# iterating to next byte of a0
 		addi s2,s2,1							# counting # of char
@@ -45,7 +53,7 @@ lw a0, (a0)
 		li s5, 10
 		
 		lb s1, (a0)								# first byte in num
-		beq s1, s0, num_end 					# stops when hit \r
+		beq s1, a3, num_end 					# stops when hit \r
 		addi s6, s2, 0							# puts # of chars into s6
 
 		exponent_check:
@@ -66,6 +74,17 @@ lw a0, (a0)
 	num_end:
 		addi a0,s7,0
 # End your  coding  here!
-		#ret
+
+		ld a3, 0(sp)
+		ld s1, 8(sp)
+		ld s2, 16(sp)
+		ld s3, 24(sp)
+		ld s4, 32(sp)
+		ld s5, 40(sp)
+		ld s6, 48(sp)
+		ld s7, 56(sp)
+		ld ra, 64(sp)
+		addi sp,sp,72
+		ret
 	
 #######################end of income_from_record###############################################	
