@@ -13,7 +13,7 @@ totalIncome_fileNotEmpty:
 	
 	# Start your coding from here!
 
-	li a0, 123
+	addi a0, a1,0
 	#if no student code entered, a0 just returns 0 always :(
 	
 # End your  coding  here!

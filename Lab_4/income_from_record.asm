@@ -1,7 +1,18 @@
+# Copy-paste this into the very top of your income_from_record.asm.
+.data
+incomeStr: .asciz "1\r"
 
-		
-	
+.text
+li a0 0x10040004
+la t1 incomeStr
+sw t1 (a0)
+
+# Also comment out the return instruction at the end of the file!
+
+
 income_from_record:
+
+
 #function to return numerical income from a specific record
 #e.g. for record "Microsoft,34\r\n", income to return is 34(for which name is Microsoft)
 
@@ -13,79 +24,48 @@ income_from_record:
 
 	#if no student code entered, a0 just returns 0 always :(
 	# s2 is the thingy
-li s5, 0x0d
+
+li s0, 0x0d										# initialize with \r 
+lw a0, (a0)
 	
 	char_start:
-		lb a0, (s2)
-		beq, a0, s5, char_end
+		lb s1, (a0)
+		beq, s1, s0, char_end					# if byte is = \r
 	char_body:
-		li a7,11
-		ecall
-	update:
-		addi s2,s2,1
-		addi a3,a3,1
+		addi a0,a0,1							# iterating to next byte of a0
+		addi s2,s2,1							# counting # of char
 		j char_start
 	char_end:
-		# print new line
-		addi a0, s6, 0
-		li a7, 4
-		ecall
-		addi a0, a3, 0
-		li a7, 1
-		sub s2, s2, a3
-		ecall
-	
-	addi a3, a3, -1
-	li t6, 0
-# a3 is the num of char - 1
+		sub a0, a0, s2							# return a0 back to og position
+		addi s2, s2, -1							# subtracting one from num of char
+		li s3, 0								# initialize with 0
+		
 	num_start:
-		# initializes exponent shit
-		li t1, 1
-		li t2, 10
+		li s4, 1								# initializes exponent vars
+		li s5, 10
 		
-		# first digit into t3
-		lb t3, (s2)
-		
-		# stops when hit \r
-		beq t3, s5, num_end 
-		addi t4, a3, 0
-		
+		lb s1, (a0)								# first byte in num
+		beq s1, s0, num_end 					# stops when hit \r
+		addi s6, s2, 0							# puts # of chars into s6
+
 		exponent_check:
-			beqz t4, num_body
+			beqz s6, num_body
 		exponent_body:
-			mul t1, t1, t2
-			addi t4, t4, -1
+			mul s4, s4, s5						# multiply s4 by 10
+			addi s6, s6, -1						# deincrement s6
 			j exponent_check
 		
 	num_body:
-		# converts ascii to decimal
-		addi t5, t3, -0x30
-		# multiplies number by 10^place
-		mul t5, t5, t1
-		add t6, t6, t5
-		# print new line 
-		li a7, 4
-		addi, a0, s6, 0
-		ecall
+		addi s1, s1, -0x30						# convert ascii to dec
+		mul s1, s1, s4							# multiplies by place
+		add s7, s7, s1							# stores sum in s7
 	num_update:
-		addi s2,s2,1
-		addi a3,a3,-1
+		addi a0,a0,1
+		addi s2,s2,-1
 		j num_start
 	num_end:
-		# prints the sum of the numbers 
-		addi a0,t6,0
-		li a7,1 
-		ecall
-		# print new line 
-		addi a0,s6,0
-		li a7,4
-		ecall
-		# print num of characters after going thru (should be -1)
-		addi a0,a3,0
-		li a7,1
-		ecall
-	
+		addi a0,s7,0
 # End your  coding  here!
-	ret
+		#ret
 	
 #######################end of income_from_record###############################################	
