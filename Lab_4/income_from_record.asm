@@ -1,11 +1,19 @@
-.data
-	testStr: .asciz "34\r\n"
-	newline: .asciz "\n"
+
+		
 	
-.text
-la s2, testStr
+income_from_record:
+#function to return numerical income from a specific record
+#e.g. for record "Microsoft,34\r\n", income to return is 34(for which name is Microsoft)
+
+#arguments:	a0 contains pointer to start of numerical income in record 
+
+#function RETURNS income numerical value of the asci income in a0 (34 in our example)
+	
+# Start your coding from here!
+
+	#if no student code entered, a0 just returns 0 always :(
+	# s2 is the thingy
 li s5, 0x0d
-la s6, newline
 	
 	char_start:
 		lb a0, (s2)
@@ -18,6 +26,7 @@ la s6, newline
 		addi a3,a3,1
 		j char_start
 	char_end:
+		# print new line
 		addi a0, s6, 0
 		li a7, 4
 		ecall
@@ -75,21 +84,8 @@ la s6, newline
 		addi a0,a3,0
 		li a7,1
 		ecall
-		
-	
-income_from_record:
-#function to return numerical income from a specific record
-#e.g. for record "Microsoft,34\r\n", income to return is 34(for which name is Microsoft)
-
-#arguments:	a0 contains pointer to start of numerical income in record 
-
-#function RETURNS income numerical value of the asci income in a0 (34 in our example)
-	
-# Start your coding from here!
-
-	#if no student code entered, a0 just returns 0 always :(
 	
 # End your  coding  here!
-	#ret
+	ret
 	
 #######################end of income_from_record###############################################	
